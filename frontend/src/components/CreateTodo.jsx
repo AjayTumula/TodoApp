@@ -1,10 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function CreateTodo() {
 
     //react-query
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+
+  
+    const fetchData = () => {
+        fetch("http://localhost:3001/todo", {
+          method: "POST",
+          body: JSON.stringify({
+              title: title,
+              description: description
+          }),
+          headers: {
+              "Content-type": "application/json"
+          }
+      })
+      .then(async function(res) {
+          const json = await res.json();
+          alert("Todo added");
+      })
+      } 
+    
+      useEffect(() => {
+        fetchData();
+      }, [])
+
+      const handleButton = () => {
+        fetchData();
+      }
+
+    
 
   return (
     <div>
@@ -28,22 +56,7 @@ export function CreateTodo() {
         }}
       ></input>{" "}
       <br />
-      <button style={{ margin: 10, padding: 10 }} onClick={() => {
-        fetch("http://localhost:3001/todo", {
-            method: "POST",
-            body: JSON.stringify({
-                title: title,
-                description: description
-            }),
-            headers: {
-                "Content-type": "application/json"
-            }
-        })
-        .then(async function(res) {
-            const json = await res.json();
-            alert("Todo added");
-        })
-      }}>Add a todo</button>
+      <button style={{ margin: 10, padding: 10 }} onClick={handleButton}>Add a todo</button>
     </div>
   );
 }
